@@ -17,9 +17,7 @@ jobs:
           - attempt: 1
           - attempt: 2
           - attempt: 3
-          
-  build-and-push:
-    runs-on: ubuntu-latest
+
     steps:
     - name: Check Out Repo
       uses: actions/checkout@v2
@@ -39,8 +37,7 @@ jobs:
         tags: ishan091/week-18-class:latest  # Replace with your Docker Hub username and repository
 
     - name: Verify Pushed Image
-      run: docker pull  ishan091/week-18-class:latest  # Replace with your Docker Hub username and repository
-
+      run: docker pull ishan091/week-18-class:latest  # Replace with your Docker Hub username and repository
 
     - name: Deploy to EC2
       uses: appleboy/ssh-action@master
@@ -48,9 +45,9 @@ jobs:
         host: ${{ secrets.SSH_HOST }}
         username: ${{ secrets.SSH_USERNAME }}
         key: ${{ secrets.SSH_KEY }}
-        script: | # Replace below docker image with your image
+        script: | 
           sudo docker pull ishan091/week-18-class:latest 
           sudo docker stop web-app || true
           sudo docker rm web-app || true
           sudo docker run -d --name web-app -p 3005:3000 ishan091/week-18-class:latest
-    
+          
