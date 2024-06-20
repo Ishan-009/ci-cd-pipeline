@@ -28,3 +28,17 @@ jobs:
 
     - name: Verify Pushed Image
       run: docker pull  ishan091/week-18-class:latest  # Replace with your Docker Hub username and repository
+
+
+    - name: Deploy to EC2
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USERNAME }}
+        key: ${{ secrets.SSH_KEY }}
+        script: | # Replace below docker image with your image
+          sudo docker pull ishan091/week-18-class:latest 
+          sudo docker stop web-app || true
+          sudo docker rm web-app || true
+          sudo docker run -d --name web-app -p 3005:3000 ishan091/week-18-class:latest
+    
